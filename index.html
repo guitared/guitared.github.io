@@ -2,13 +2,59 @@
 <meta charset="utf-8">
 <html>
 	<head>
-		<title>Guitared's Playground</title>
+		<title>Playground</title>
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 		<style>
-		html {background:#ffcc00;font-family:Tahoma;}
-		body {text-align:center;}
+		html {font-family:Consolas;color:#000;margin:0;padding:0;}
+		body {margin:0;padding:0;}
+		header {width:100%;background:#fff;padding:10px;color:#000;box-sizing:border-box;border-bottom:1px solid;}
+		content {box-sizing:border-box;padding:10px;}
+		a {color:#000;text-decoration:none;}
+		a:visited {color:#000;}
+		a:hover {color:#bbb;}
+		ul {list-style-type: none;}
+		footer {box-sizing:border-box;padding:0px 10px;border-top:1px solid;}
+		i[c] {color:#111;}
+		@-webkit-keyframes blinker {  
+		  0% { visibility: visible; }
+		  50% { visibility: hidden; }
+		  100% { visibility: visible; }
+		}
+		.cursor {
+		  -webkit-animation: blinker steps(1) 1s infinite;
+		}
 		</style>
 	</head>
+	<row>
 	<body>
-		<h1>["Guitared's Playground"]</h1>
+		<header>
+			<b><i class="fa fa-folder-o fa-lg"></i>:\Guitared\Playground><span class="cursor">_</span></b>
+		</header>
+		<content>
+		
+		<ul>
+			<li><i c>&lt;!-- Testing template phase --&gt;</i></li>
+			<br>
+			<b><i class="fa fa-code fa-lg fa-fw"></i> Computer Assignment</b>
+			<li><a href="#">PGM file Reader</a></li>
+			<li><a href="#">Work 2</a></li>
+			<br>
+			<b><i class="fa fa-desktop fa-lg fa-fw"></i> Canvas</b>
+			<li><a href="#">Drawing things</a></li>
+			<li><a href="#">Is it red?</a></li>
+			<br>
+			<b><i class="fa fa-html5 fa-lg fa-fw"></i> HTML5</b>
+			<li><a href="#">Web Audio</a></li>
+			<li><a href="#">Signal Processing</a></li>
+			<br>
+			<li><i c>&lt;!-- Testing template phase --&gt;</i></li>
+		</ul>
+		<content>
+		<footer>
+			<p><i class="fa fa-quote-left"></i> Live hard -- Code harder <i class="fa fa-quote-right"></i></p>
+			<i class="fa fa-github-alt fa-lg"></i> guitared | 
+			<i class="fa fa-twitter fa-lg"></i> @gu174r3d |
+			<i class="fa fa-facebook-official fa-lg"></i> guitared.htmI
+		</footer>
 	</body>
 </html>

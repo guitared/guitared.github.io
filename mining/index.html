@@ -1,0 +1,107 @@
+<meta charset="utf-8">
+<html>
+<title>Neuron Networks - Data Mining Homework</title>
+	<script src="data.js"></script>
+	<script src="neuron.js"></script>
+	<style>
+		[type=text] {border:1px solid black;}
+		[bias] {background:#fed;} 
+		[w] {background:#def;}
+		[we] {background:#ccc;}
+		[v1]{background:#faa;}
+		[v2]{background:#afa;}
+		[v3]{background:#aaf;}
+		[vs]{background:#ccc;}
+	</style>
+	<h3>Neuron Network : 550610515</h3>
+	<h4>Results show in console (Google Chrome only), use <u>CTRL+SHIFT+J</u> to open console.</h4>
+	
+	<table border="0">
+	<tr><td colspan="4">Loop:<input type="text" id="loop"/> Index:<input type="text" id="ind"/></td></tr>
+	<tr><td>Attribute1:<input type="text" id="inpt1"/></td><td><input v1 type="text" id="w1t1"/><br><input v2 type="text" id="w1t2"/><br><input v3 type="text" id="w1t3"/></td>
+	<td rowspan="4" v1><input bias type="text" id="b1"/><br><input type="text" id="s1"/><br><h3>=</h3><input type="text" id="e1"/><br><input we type="text" id="we1"/>
+	<br>Error:<br><input type="text" id="de1"/>
+	</td>
+	<td rowspan="13" vs><input bias type="text" id="bs"/><br><input type="text" id="ss"/><br><br><input type="text" id="cl"/><br>Error:<br><input type="text" id="err"/>
+	<br><input type="text" id="ds"/></td>
+	</tr>
+	<tr><td>Attribute2:<input type="text" id="inpt2"/></td><td><input w v1 type="text" id="w2t1"/><br><input v2 type="text" id="w2t2"/><br><input v3 type="text" id="w2t3"/></td></tr>
+	<tr><td>Attribute3:<input type="text" id="inpt3"/></td><td><input w v1 type="text" id="w3t1"/><br><input v2 type="text" id="w3t2"/><br><input v3 type="text" id="w3t3"/></td></tr>
+	<tr><td>Attribute4:<input type="text" id="inpt4"/></td><td><input w v1 type="text" id="w4t1"/><br><input v2 type="text" id="w4t2"/><br><input v3 type="text" id="w4t3"/></td></tr>
+	<tr><td>Attribute5:<input type="text" id="inpt5"/></td><td><input w v1 type="text" id="w5t1"/><br><input v2 type="text" id="w5t2"/><br><input v3 type="text" id="w5t3"/></td>
+	<td rowspan="4" v2><input bias type="text" id="b2"/><br><input type="text" id="s2"/><br><h3>=</h3><input type="text" id="e2"/><br><input we type="text" id="we2"/>
+	<br>Error:<br><input type="text" id="de2"/></td></tr>
+	<tr><td>Attribute6:<input type="text" id="inpt6"/></td><td><input w v1 type="text" id="w6t1"/><br><input v2 type="text" id="w6t2"/><br><input v3 type="text" id="w6t3"/></td></tr>
+	<tr><td>Attribute7:<input type="text" id="inpt7"/></td><td><input w v1 type="text" id="w7t1"/><br><input v2 type="text" id="w7t2"/><br><input v3 type="text" id="w7t3"/></td></tr>
+	<tr><td>Attribute8:<input type="text" id="inpt8"/></td><td><input w v1 type="text" id="w8t1"/><br><input v2 type="text" id="w8t2"/><br><input v3 type="text" id="w8t3"/></td></tr>
+	<tr><td>Attribute9:<input type="text" id="inpt9"/></td><td><input w v1 type="text" id="w9t1"/><br><input v2 type="text" id="w9t2"/><br><input v3 type="text" id="w9t3"/></td>
+	<td rowspan="5" v3><input bias type="text" id="b3"/><br><input type="text" id="s3"/><br><h3>=</h3><input type="text" id="e3"/><br><input we type="text" id="we3"/>
+	<br>Error:<br><input type="text" id="de3"/></td></tr>
+	<tr><td>Attribute10:<input type="text" id="inpt10"/></td><td><input w v1 type="text" id="w10t1"/><br><input v2 type="text" id="w10t2"/><br><input v3 type="text" id="w10t3"/></td></tr>
+	<tr><td>Attribute11:<input type="text" id="inpt11"/></td><td><input w v1 type="text" id="w11t1"/><br><input v2 type="text" id="w11t2"/><br><input v3 type="text" id="w11t3"/></td></tr>
+	<tr><td>Attribute12:<input type="text" id="inpt12"/></td><td><input w v1 type="text" id="w12t1"/><br><input v2 type="text" id="w12t2"/><br><input v3 type="text" id="w12t3"/></td></tr>
+	<tr><td>Attribute13:<input type="text" id="inpt13"/></td><td><input w v1 type="text" id="w13t1"/><br><input v2 type="text" id="w13t2"/><br><input v3 type="text" id="w13t3"/></td></tr>
+
+	</table>
+
+	<script>
+	var loop = 1;
+	var ind = 0;
+	var eeee = 0.0;
+	var esum = 0.0;
+	var emax = -10000;
+	var emin = 10000;
+	var truee = 0;
+	update();
+		filldata(ind);
+		sumh(1);
+		sumh(2);
+		sumh(3);
+		sums();
+		backward();
+		//eeee=eeee;
+		console.log("loop: "+loop+"data"+ind);
+		ind+=1;
+	function click(){
+		esum=0.0;
+		filldata(ind);
+		sumh(1);
+		sumh(2);
+		sumh(3);
+		sums();
+		//sleep(500);
+		backward();
+		ind+=1;
+		//if(Math.abs(eeee)>0.4){ind=178;}
+		if(ind==178){
+		/*update();/**/ind=0;loop+=1;
+		maxvl = Math.max(Math.abs(emax),Math.abs(emin));
+		console.log("loop: "+loop+"\tmax: "+maxvl);
+		console.log("true: "+truee/178*100);truee = 0;
+		emax=-10000;
+		emin = 10000;
+			
+		}
+	}
+	
+	var timer = setInterval(function(){ click()},10);
+	function cleart(){clearInterval(timer);}
+	function expor(){
+		for(i=1;i<=13;i++){
+				console.log("weighta["+i+"]to[1]\t"+e("#w"+i+"t1"));
+				console.log("weighta["+i+"]to[2]\t"+e("#w"+i+"t2"));
+				console.log("weighta["+i+"]to[3]\t"+e("#w"+i+"t3"));
+			}
+			console.log("bias[1]\t"+e("#b1"));
+			console.log("bias[2]\t"+e("#b2"));
+			console.log("bias[3]\t"+e("#b3"));
+			console.log("weightl[1]\t"+e("#we1"));
+			console.log("weightl[2]\t"+e("#we2"));
+			console.log("weightl[3]\t"+e("#we3"))
+			console.log("bias[out]\t"+e("#bs"));
+	}
+	</script>
+
+
+
+</html>

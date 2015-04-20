@@ -1,0 +1,27 @@
+<meta charset="utf-8">
+<h3>TwitAscii</h3>
+<span>3 Characters</span>
+<input type="text" maxlength="3" size="3" onkeyup ="a()" id="input">
+<br><br>
+<span>Output</span><br>
+<textarea rows="8" cols="21" id="output">
+█████████████
+█░█░█░█░█░█░█
+█░█░█░█░█░█░█
+█░░██░█░█░░░█
+█░░██░█░██░██
+█░█░█░░░██░██
+█████████████
+</textarea>
+<script>
+	var text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+	var value = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+function a(){
+	var s = "█░";
+	//console.log(parseInt(n,16).toString(2));
+	var i = document.getElementById("input");
+	var ins = i.value.toUpperCase();
+	var o = document.getElementById("output");
+	o.value = text.indexOf(ins[0]);
+}
+</script>
