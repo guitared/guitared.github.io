@@ -48,7 +48,7 @@ app.controller('searchCtrl', function($scope, $http, $localStorage, $timeout) {
                     return;
                 }
             }
-            $localStorage.series.push({
+            $localStorage.series.unshift({
                 id: e.id,
                 name: e.name,
                 seasons: e.seasons.map(function(e) {
