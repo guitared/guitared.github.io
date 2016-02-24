@@ -1,0 +1,12 @@
+<html>
+	<script src="themoviedb.min.js"></script>
+	<script>
+		function successCB(data){
+			console.log(data);
+		}
+		function errorCB(){
+		
+		}
+		theMovieDb.search.getTv({"query":"Breaking%20Bad"}, successCB, errorCB);
+	</script>
+</html>
