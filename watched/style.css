@@ -1,0 +1,66 @@
+html {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    font-size: 14px;
+}
+body {
+    padding-top: 10px;
+    width: 700px;
+    margin: auto;
+    text-align: center;
+}
+.search-box {
+    background: #f7f7f7;
+    padding: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+/* Hotfixes, Dont do this */
+.search-header {
+    width: 120px!important;
+}
+.search-input {
+    width: 500px!important;
+}
+
+.search-result {
+    margin-left: 125px;
+    width: 498px
+}
+.search-result {
+    position: absolute;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    z-index: 1;
+}
+.search-result a {
+    display: block;
+    width: 100%;
+    height: 60px;
+    color: #666;
+    background: #fff;
+    line-height: 60px;
+}
+.search-result a:hover {
+    background: #eee;
+}
+.search-result a img {
+    width: 42px;
+    height: 60px;
+    float: left;
+}
+.series-box {
+    text-align: left;
+    display: block;
+    background: #f7f7f7;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    padding: 10px;
+    box-sizing: border-box;
+}
+.series-box img {
+    float: left;
+}
+.content-box {
+    padding: 50px;
+    box-sizing: border-box;
+}
