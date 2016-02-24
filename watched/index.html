@@ -2,12 +2,12 @@
 <title>Watched</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" href="style.css">
-
+<background></background>
 <body ng-app="watched">
     <h1>Watched <small>Remember TV series you have watched for you</small></h1>
     <div class='form-inline search-box' ng-controller="searchCtrl">
         <div class="form-group">
-            <label class="text-right control-label search-header">Add new Series </label>
+            <label class="text-right control-label search-header">Add new Series &nbsp;&nbsp;</label>
             <input type="text" ng-model="query" placeholder="Search by name" ng-change="searchByName()" class="form-control search-input" ng-focus="focused = true" ng-blur="delayBlur();">
             <div class="search-result" ng-if="focused">
                 <a ng-repeat="series in res | limitTo:5" ng-click="$parent.addSeries(series)"><img ng-if="series.poster_path == undefined" src="no-poster.jpg"><img ng-if="series.poster_path" src="{{'http://image.tmdb.org/t/p/w92/'+series.poster_path}}">{{series.name}} {{series.first_air_date | year}}</a>
@@ -30,7 +30,7 @@
                         <div class="col-sm-3">
                             <input type="number" value="{{season.ep}}" min="0" max="{{season.num}}" ng-model="val" class="form-control input-sm" ng-change="$parent.updateEPval(series,season,val)">
                         </div>
-                        <button class="input-sm btn btn-default" ng-if="season.ep!=season.num" ng-click="$parent.updateEP(series,season)">+</button>
+                        <button class="btn btn-sm btn-success" ng-if="season.ep!=season.num" ng-click="$parent.updateEP(series,season)"><span class="glyphicon glyphicon-plus"></span> Add</button>
                     </div>
                 </div>
             </div>
@@ -39,5 +39,16 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/0.4.0/trianglify.min.js"></script>
+<script>
+    var pattern = Trianglify({
+        width: window.innerWidth,
+        height: window.innerHeight,
+		cell_size: 75,
+		seed: 'guitared',
+		x_colors: 'YlGnBu'
+    });
+    document.querySelector("background").appendChild(pattern.canvas())
+</script>
 <script src="app.js"></script>
 </html>
