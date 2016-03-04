@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 text-right control-label"><span class="text-success glyphicon glyphicon-ok" ng-if="season.ep==season.num"></span> Season {{season.ss}}</label>
                         <div class="col-sm-3">
-                            <input type="number" value="{{season.ep}}" min="0" max="{{season.num}}" ng-model="val" class="form-control input-sm" ng-change="$parent.updateEPval(series,season,val)">
+                            <input type="number" value="{{season.ep}}" min="0" max="{{season.num}}" ng-model="season.ep" class="form-control input-sm" ng-change="$parent.updateEPval(series,season,val)">
                         </div>
                         <button class="btn btn-sm btn-success" ng-if="season.ep!=season.num" ng-click="$parent.updateEP(series,season)"><span class="glyphicon glyphicon-plus"></span> Add</button>
                     </div>
