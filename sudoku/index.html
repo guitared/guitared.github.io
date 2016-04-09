@@ -1,0 +1,58 @@
+<html ng-app="ss">
+<body ng-controller="mainCtrl">
+<h1>S u d o k u </h1>
+<p>{{result}}</p>
+<button ng-click="s()" ng-if="result!='Generating...'">Get new</button><br><br>
+<div>
+	<input type="text" ng-model="num.value" ng-repeat="num in nums" maxlength="1" ng-style="num.style">
+</div>
+<p>by guitared, 2016</p>
+
+<style>
+body {text-align:center;font:14px Arial;}
+h1 {font: 30px Arial;padding-buttom:40px;}
+input {width:50px;height:50px;font-size:25px;text-align:center;box-sizing:border-box;border:none;background:none;}
+div {width:450px;height:450px;border:2px solid;background-color:#fff;margin:auto;
+background-image: linear-gradient(black 2px, transparent 2px),
+linear-gradient(90deg, black 2px, transparent 2px),
+linear-gradient(rgba(0,0,0,.3) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,0,0,.3) 1px, transparent 1px);
+background-size:150px 150px, 150px 150px, 50px 50px, 50px 50px;
+background-position:-1px -1px, -1px -1px, -1px -1px, -1px -1px
+}
+button {
+    border: 2px solid;
+    background: #fff;
+    cursor: pointer;
+}
+button:hover {background:#fafafa;}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+<script src="sudoku.js"></script>
+<script>
+// stores the puzzle instance
+var thePuzzle,matr;
+thePuzzle = new Sudoku();
+thePuzzle.level = 1;
+// generate the new puzzle.
+var app = angular.module('ss',[]);
+app.controller('mainCtrl', function($scope,$window) {
+	$scope.val = $window.matr;
+	$scope.game = $window.thePuzzle;
+	$scope.game.done = function(){
+		$scope.result = '';
+		var i=81;while(i--){$scope.nums[i].value=$scope.game.getVal(parseInt(i/9),i%9);if($scope.nums[i].value==0){$scope.nums[i].value='';}else{/*$scope.nums[i].style='{"font-weight":"bold"}';*/}}
+		$scope.$apply()
+	}
+	$scope.nums = [];
+	i=81;while(i--)$scope.nums = $scope.nums.concat([{id:80-i,value:'',style:'{}'}]);
+	$scope.r = function(){i=81;while(i--)$scope.nums[i].value='';$scope.nums[i].style='{}';$scope.result='';}
+	$scope.s = function(){
+		//$scope.r();
+		$scope.game.newGame();
+		$scope.result = "Generating...";
+	}
+});
+</script>
+</body>
+</html>
