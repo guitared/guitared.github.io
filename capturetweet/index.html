@@ -1,0 +1,89 @@
+<script src="angular.min.js"></script>
+<title>Twitter Capture Generator</title>
+<h2>Twitter Capture Generator</h2>
+<p>By @gu174r3d</p>
+<style>
+#tcc {width:500px;height:500px;border:1px #f7f7f7;}
+#loading {
+    position: relative;
+    width: 507px;
+    height: 511px;
+    margin-top: -505px;
+    /* z-index: 999; */
+    background: #f7f7f7;
+}
+.indie {width:360px;margin:auto;height:60px;}
+.twitter-tweet {opacity: 0.94;}
+h1 {
+    color: white;
+    font-family: monospace;
+    font-weight: lighter;
+    text-align: center;
+}
+h2,p {
+    color: #333;
+    font-family: monospace;
+    font-weight: lighter;
+    text-align: center;
+	padding-bottom: none;
+}
+p {color:#aaa;padding-top:none;}
+input,button {padding:10px;}
+</style>
+<script>
+window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+ 
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+ 
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+<html ng-app="tweetcopy">
+<center>
+<div class="panel panel-default" ng-controller="MainCtrl">
+<input type="text" ng-model="newtw" placeholder="E.g.(685166583174397952)"/><button ng-click="load()">Load Tweet</button>
+&emsp; <input type="text" ng-model="name" placeholder="Name of your page"/>
+<br>
+<br>
+<div id="tcc">
+	<div class="indie"></div>
+	<div id="twc"></div>
+	<div class="indie"><h1>{{name}}</h1></div>
+</div>
+<div id="loading"></div>
+</div>
+</center>
+<script>
+var app = angular.module('tweetcopy',[]);
+app.controller('MainCtrl', function($scope,$window){
+  $scope.newtw = "";
+  $scope.load = function(){
+	if(!$window.twttr)return;
+	if(!$scope.name)$scope.name = "#CaptureFindFather";
+	$window.document.getElementById('tcc').style.backgroundImage = 'url(https://source.unsplash.com/category/nature/500x500)';
+	$window.document.getElementById('twc').innerHTML = '';
+	$window.twttr.widgets.createTweet(
+	  $scope.newtw,
+	  document.getElementById('twc'),
+	  {
+		cards:'hidden',
+		dnt:true,
+		align:'center',
+		width:'400px'
+	  }
+	).then(function(el){document.getElementById('loading').style.display="none";});
+	
+  };
+});
+
+</script>
+</html>
