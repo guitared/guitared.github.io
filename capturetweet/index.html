@@ -63,27 +63,6 @@
 
         return t;
     }(document, "script", "twitter-wjs"));
-</script>
-<html ng-app="tweetcopy">
-<center>
-    <div class="panel panel-default" ng-controller="MainCtrl">
-        <input type="text" ng-model="newtw" placeholder="E.g.(685166583174397952)" />
-        <button ng-click="load()">Load Tweet</button>
-        &emsp;
-        <input type="text" ng-model="name" placeholder="Name of your page" />
-        <br>
-        <br>
-        <div id="tcc">
-            <div class="indie"></div>
-            <div id="twc"></div>
-            <div class="indie">
-                <h1>{{name}}</h1>
-            </div>
-        </div>
-        <div id="loading"></div>
-    </div>
-</center>
-<script>
     var app = angular.module('tweetcopy', []);
     app.controller('MainCtrl', function($scope, $window) {
         $scope.newtw = "";
@@ -109,5 +88,21 @@
         };
     });
 </script>
-
-</html>
+<center ng-app="tweetcopy">
+    <div class="panel panel-default" ng-controller="MainCtrl">
+        <input type="text" ng-model="newtw" placeholder="E.g.(685166583174397952)" />
+        <button ng-click="load()">Load Tweet</button>
+        &emsp;
+        <input type="text" ng-model="name" placeholder="Name of your page" />
+        <br>
+        <br>
+        <div id="tcc">
+            <div class="indie"></div>
+            <div id="twc"></div>
+            <div class="indie">
+                <h1>{{name}}</h1>
+            </div>
+        </div>
+        <div id="loading"></div>
+    </div>
+</center>
