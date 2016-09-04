@@ -1,0 +1,151 @@
+<!doctype html>
+<center>
+    <title>Karaoke Generator</title>
+    <meta charset="utf-8">
+    <meta name="author" content="guitared">
+    <style>
+        * {
+            font-family: Tahoma;
+        }
+        img {
+            display: none;
+            max-width: 960px;
+        }
+        #input {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+        #input + label {
+            font-size: 1.25em;
+            font-weight: 700;
+            padding: 100px 300px;
+            color: #666;
+            background-color: #f7f7f7;
+            display: inline-block;
+            cursor: pointer;
+        }
+        #input:focus + label,
+        #input + label:hover {
+            background-color: #eee;
+        }
+        #ctrlbox {
+            text-align: center;
+            padding: 50px 10px;
+            display: none;
+        }
+        a {
+            text-decoration: none;
+            color: #666;
+            padding: 10px 30px;
+            background: #f7f7f7;
+            margin-top: 20px;
+        }
+    </style>
+    <h1>Karaoke Generator</h1>
+    <input id="input" type="file" name="pic" accept="image/*">
+    <label id="label" for="input">Choose a file</label>
+    <br>
+    <canvas id="canvas" height="0px"></canvas>
+    <br>
+    <img id="buffer" />
+</center>
+<script>
+    var ctx = document.getElementById("canvas").getContext("2d");
+    document.getElementById("input").onchange = function() {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById("buffer").src = e.target.result;
+            document.getElementById("input").style.display = 'none';
+            document.getElementById("label").style.display = 'none';
+            document.getElementById("ctrlbox").style.display = 'block';
+            ctx.canvas.height = (document.getElementById("buffer").width > 960) ? 960 / document.getElementById("buffer").width * document.getElementById("buffer").height : document.getElementById("buffer").height;
+            ctx.canvas.width = (document.getElementById("buffer").width > 960) ? 960 : document.getElementById("buffer").width;
+            render();
+        };
+        reader.readAsDataURL(this.files[0]);
+    };
+
+    function render() {
+        ctx.drawImage(document.getElementById("buffer"), 0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        var text = document.getElementById("text1").value;
+        var text2 = document.getElementById("text2").value;
+        var range = document.getElementById("text1-r").value / 100;
+        var range2 = document.getElementById("text2-r").value / 100;
+        var y1 = document.getElementById("text1-y").value / 100 * ctx.canvas.height;
+        var y2 = document.getElementById("text2-y").value / 100 * ctx.canvas.height;
+        var w1 = document.getElementById("text1-w").value;
+        var w2 = document.getElementById("text2-w").value;
+
+        ctx.font = w1 + 'px Tahoma';
+        ctx.lineWidth = w1 / 10;
+        var gradient = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+        gradient.addColorStop("0", document.getElementById("text1-c2").value);
+        gradient.addColorStop(range, document.getElementById("text1-c2").value);
+        gradient.addColorStop(range, document.getElementById("text1-c4").value);
+        gradient.addColorStop("1", document.getElementById("text1-c4").value);
+        var gradient2 = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+        gradient2.addColorStop("0", document.getElementById("text1-c1").value);
+        gradient2.addColorStop(range, document.getElementById("text1-c1").value);
+        gradient2.addColorStop(range, document.getElementById("text1-c3").value);
+        gradient2.addColorStop("1", document.getElementById("text1-c3").value);
+        ctx.strokeStyle = gradient;
+        ctx.fillStyle = gradient2;
+        ctx.textAlign = "center";
+        ctx.miterLimit = 2;
+        ctx.strokeText(text, ctx.canvas.width / 2, ctx.canvas.height - y1);
+        ctx.fillText(text, ctx.canvas.width / 2, ctx.canvas.height - y1);
+
+        ctx.font = 'bold ' + w2 + 'px Tahoma';
+        ctx.lineWidth = w2 / 10;
+        var gradient3 = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+        gradient3.addColorStop("0", document.getElementById("text2-c2").value);
+        gradient3.addColorStop(range2, document.getElementById("text2-c2").value);
+        gradient3.addColorStop(range2, document.getElementById("text2-c4").value);
+        gradient3.addColorStop("1", document.getElementById("text2-c4").value);
+        var gradient4 = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+        gradient4.addColorStop("0", document.getElementById("text2-c1").value);
+        gradient4.addColorStop(range2, document.getElementById("text2-c1").value);
+        gradient4.addColorStop(range2, document.getElementById("text2-c3").value);
+        gradient4.addColorStop("1", document.getElementById("text2-c3").value);
+        ctx.strokeStyle = gradient3;
+        ctx.fillStyle = gradient4;
+        ctx.strokeText(text2, ctx.canvas.width / 2, ctx.canvas.height - y2);
+        ctx.fillText(text2, ctx.canvas.width / 2, ctx.canvas.height - y2);
+    }
+</script>
+<div id="ctrlbox">
+    <input type="text" id="text1" size="50" value="คาราโอเกะ เจเนอเรเตอร์ เวอร์ชั่น 1" onchange="render()" oninput="render()" /> 
+	Progress:
+    <input type="range" id="text1-r" min="0" max="100" step="0.5" style="width:200px" value="60" onchange="render()" oninput="render()"> 
+	Margin:
+    <input type="range" id="text1-y" min="0" max="50" step="1" value="10" onchange="render()" oninput="render()"> 
+	Width:
+    <input type="range" id="text1-w" min="20" max="80" step="1" value="40" onchange="render()" oninput="render()">
+    <input id="text1-c1" type="color" value="#0000ff" onchange="render()" oninput="render()">
+    <input id="text1-c2" type="color" value="#ffffff" onchange="render()" oninput="render()"> 
+	|
+    <input id="text1-c3" type="color" value="#ffffff" onchange="render()" oninput="render()">
+    <input id="text1-c4" type="color" value="#000000" onchange="render()" oninput="render()">
+    <br>
+    <input type="text" id="text2" size="50" value="KA-RA-O-KE GE-NE-RA-TOR VER-SON-NUENG" onchange="render()" oninput="render()" /> 
+	Progress:
+    <input type="range" id="text2-r" min="0" max="100" step="0.5" style="width:200px" value="50" onchange="render()" oninput="render()"> 
+	Margin:
+    <input type="range" id="text2-y" min="0" max="50" step="1" value="5" onchange="render()" oninput="render()"> 
+	Width:
+    <input type="range" id="text2-w" min="20" max="80" step="1" value="20" onchange="render()" oninput="render()">
+    <input id="text2-c1" type="color" value="#0000ff" onchange="render()" oninput="render()">
+    <input id="text2-c2" type="color" value="#ffffff" onchange="render()" oninput="render()"> 
+	|
+    <input id="text2-c3" type="color" value="#ffa500" onchange="render()" oninput="render()">
+    <input id="text2-c4" type="color" value="#000000" onchange="render()" oninput="render()">
+    <br>
+    <br>
+    <br>
+    <a>Right click + Save image as... to download</a>
+</div>
