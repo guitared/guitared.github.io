@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>FindHuddle</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.6.7/jquery.timeago.min.js" integrity="sha256-0+5OfvOxkLHqpLPPwy9pDjug8N3cwaqcmleaxnR5VS8=" crossorigin="anonymous"></script>
+</head>
+<body>
+<header>
+<div class="wrap"><h2>FindHuddle</h2></div>
+</header>
+
+<div class="wrap">
+<div class="select">HRH 3rd Floor</div>
+</div>
+
+<div id="main">
+<div class="wrap">
+
+<div id="room1" class="room">
+<h3 class="name">A2241A</h3>
+<time id="test1" class="timeago" datetime=""></time>
+</div>
+
+<div id="room2" class="room">
+<h3 class="name">E5FBAA</h3>
+<time id="test2" class="timeago" datetime=""></time>
+</div>
+
+<div id="room3" class="room">
+<h3 class="name">74A4EA</h3>
+<time id="test3" class="timeago" datetime=""></time>
+</div>
+
+<div id="room4" class="room">
+  <h3 class="name">E7621A</h3>
+  <time id="test4" class="timeago" datetime=""></time>
+</div>
+
+<div id="room5" class="room">
+  <h3 class="name">1171DA</h3>
+  <time id="test5" class="timeago" datetime=""></time>
+</div>
+
+<div id="room6" class="room">
+  <h3 class="name">48169A</h3>
+  <time id="test6" class="timeago" datetime=""></time>
+</div>
+
+</div>
+</div>
+<footer>
+<div class="wrap" style="display:none">
+Data refreshed <time id="refreshed_time" class="timeago" datetime=""></time> <a href="#" onclick="check()">Refresh</a>
+<pre id="debug" style="display:none;"></pre>
+</div>
+</footer>
+</body>
+</html>
+
+<script>
+var _loading = false
+const api_endpoint = "https://nodeapp-vkccn73xiq-an.a.run.app/api/devices/"
+var t = "api/devices/"
+function check(){
+	_loading = true
+	//fetch(api_endpoint).then(e=>e.json()).then(e=>proc(e))
+	jQuery.get({url: api_endpoint, cache: false}, function(data){
+    proc(data)
+    //debug.innerText+=JSON.stringify(data)
+    })
+}
+function update_time(x,el,tel){
+  y = new Date(x.lastOnline).addHours(6)
+  var diff = (new Date() - y) / 1000
+  el.className = diff<300? "room occupied":"room available"
+  jQuery(tel+".timeago").timeago('update', y)
+}
+
+function proc(e){
+	_loading = false
+	//jQuery("#refreshed_time.timeago").timeago('update', new Date())
+	for(i in e){
+		x = e[i]
+		if(x.id == "A2241A")update_time(x,room1,'#test1')
+		if(x.id == "E5FBAA")update_time(x,room2,'#test2')
+		if(x.id == "74A4EA")update_time(x,room3,'#test3')
+		if(x.id == "E7621A")update_time(x,room4,'#test4')
+		if(x.id == "1171DA")update_time(x,room5,'#test5')
+		if(x.id == "48169A")update_time(x,room6,'#test6')
+	}
+}
+
+Date.prototype.addHours= function(h){
+    this.setHours(this.getHours()+h)
+    return this
+}
+
+jQuery(document).ready(function() {
+  check()
+  jQuery("time.timeago").timeago()
+  //debug.innerText += new Date().getTimezoneOffset()
+});
+
+setInterval(function(){check()}, 10000);
+</script>
+
+<style>
+.wrap {
+  max-width: 1000px;
+  padding: 0 10px;
+  margin: 0 auto;
+}
+
+.select {
+  margin-top:40px;
+	width: 100%;
+	height:40px;
+	line-height:40px;
+	font-size:1.1rem;
+  background: #333;
+  color:#fff;
+  padding:0 10px;
+  font-weight: 500;
+}
+
+.select a {
+	text-decoration: none;
+  color:#666;
+  cursor:default;
+}
+
+.room {
+	background: #eee;
+	padding: 10px 20px;
+	border-left: 10px solid #ddd;
+	margin-bottom:10px;
+}
+.room.available {border-color: #00A14D;}
+.room.occupied {border-color: #0C479D;}
+
+.room time {color:silver;}
+
+.room.available time:before {content:'Available ';color:#00A14D;}
+.room.occupied time:before {content:'Occupied ';color:#0C479D;}
+
+.room .name {
+	margin: 0;
+}
+
+* {box-sizing:border-box;}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  flex-direction: column;
+  font: 15px / 1.15 EMPrint, Helvetica, Arial, sans-serif;
+}
+
+header {
+  background: #3a397b;
+  background-image: linear-gradient(45deg,#3a397b 0,#0c69b0 100%);;
+  color: #fff;
+  padding: 10px 0;
+  position: relative;
+  z-index: 1;
+}
+header h2 {
+  font-weight: 400;
+  font-size:30px;
+}
+pre {
+  background: rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  overflow: auto;
+  padding: 5px;
+}
+#main {
+  padding-top: 10px;
+  transition: transform 0.3s;
+}
+footer {
+  color: #666;
+  padding: 10px 0;
+}
+footer a {
+  color: #666;
+  text-decoration: none;
+  border: 1px solid #ccc;
+  padding: 2px 6px;
+}
+</style>
