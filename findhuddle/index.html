@@ -28,32 +28,38 @@
 <div class="wrap">
 	
 <div id="room2" class="room">
-<h3 class="name">HD300001</h3>
-<time id="test2" class="timeago" datetime=""></time>
+  <h3 class="name">HD300001</h3>
+  <span class="status"></span>
+  <time id="test2" class="timeago" datetime=""></time>
 </div>
 
 <div id="room1" class="room">
-<h3 class="name">A2241A</h3>
-<time id="test1" class="timeago" datetime=""></time>
+  <h3 class="name">A2241A</h3>
+  <span class="status"></span>
+  <time id="test1" class="timeago" datetime=""></time>
 </div>
 
 <div id="room3" class="room">
-<h3 class="name">74A4EA</h3>
-<time id="test3" class="timeago" datetime=""></time>
+  <h3 class="name">74A4EA</h3>
+  <span class="status"></span>
+  <time id="test3" class="timeago" datetime=""></time>
 </div>
 
 <div id="room4" class="room">
   <h3 class="name">E7621A</h3>
+  <span class="status"></span>
   <time id="test4" class="timeago" datetime=""></time>
 </div>
 
 <div id="room5" class="room">
   <h3 class="name">1171DA</h3>
+  <span class="status"></span>
   <time id="test5" class="timeago" datetime=""></time>
 </div>
 
 <div id="room6" class="room">
   <h3 class="name">48169A</h3>
+  <span class="status"></span>
   <time id="test6" class="timeago" datetime=""></time>
 </div>
 
@@ -123,15 +129,15 @@ setInterval(function(){check()}, 10000);
 }
 
 .select {
-  margin-top:40px;
-	width: 100%;
-	height:40px;
-	line-height:40px;
-	font-size:1.1rem;
-  background: #333;
-  color:#fff;
-  padding:0 10px;
-  font-weight: 500;
+    margin-top: 40px;
+    width: 100%;
+    height: 40px;
+    line-height: 30px;
+    font-size: 1.06rem;
+    background: #333;
+    color: #fff;
+    padding: 0 20px;
+    font-weight: 400;
 }
 
 .select a {
@@ -151,8 +157,28 @@ setInterval(function(){check()}, 10000);
 
 .room time {color:silver;}
 
-.room.available time:before {content:'Available ';color:#00A14D;}
-.room.occupied time:before {content:'Occupied ';color:#0C479D;}
+.room.available .status:before{
+  content:'Available ';
+  color:#00A14D;
+  font-weight: 500;
+}
+  
+.room.occupied .status:before{
+  content:'Occupied ';
+  color:#0c69b0;
+  font-weight: 500;
+}
+
+.room.available time:before {
+  content:'(motion detected ';
+}
+.room.occupied time:before {
+  content:'(used ';
+}
+  
+.room time:after {
+  content:')';
+}
 
 .room .name {
 	margin: 0;
