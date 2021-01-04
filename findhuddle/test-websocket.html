@@ -1,16 +1,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
 <pre id="log"></pre>
-
+<button onclick="send()">Send</button>
 <script type="text/javascript">
+  id = "web_" + parseInt(Math.random() * 100, 10)
+  client = new Paho.MQTT.Client("farmer.cloudmqtt.com", 33962, id);
+  
   var _log = document.getElementById('log');
   function log(e){
     _log.innerText += e + '\n';
     console.log(e);
   }
   
+  function send(){
+    message = new Paho.MQTT.Message("Test sending from"+id);
+    message.destinationName = "/sonoff/tele/RESULT";
+    client.send(message);
+    log('sent..');
+  }
   
-  client = new Paho.MQTT.Client("farmer.cloudmqtt.com", 33962, "web_" + parseInt(Math.random() * 100, 10));
-
   client.onConnectionLost = onConnectionLost;
   client.onMessageArrived = onMessageArrived;
   var options = {
