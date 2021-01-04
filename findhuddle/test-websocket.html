@@ -1,0 +1,45 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+<pre id="log"></pre>
+
+<script type="text/javascript">
+  var log = document.getElementById('log');
+  function log(e){
+    log.innerText += e + '\n';
+    console.log(e);
+  }
+  
+  
+  client = new Paho.MQTT.Client("farmer.cloudmqtt.com", 33962, "web_" + parseInt(Math.random() * 100, 10));
+
+  client.onConnectionLost = onConnectionLost;
+  client.onMessageArrived = onMessageArrived;
+  var options = {
+    useSSL: true,
+    userName: "findhuddle",
+    password: "findhuddle",
+    onSuccess:onConnect,
+    onFailure:doFail
+  }
+
+  client.connect(options);
+
+  function onConnect() {
+    console.log("onConnect");
+    client.subscribe("/tele/sonoff/RESULT");
+    client.subscribe("/sonoff/tele/RESULT");
+  }
+
+  function doFail(e){
+    log(e);
+  }
+
+  function onConnectionLost(responseObject) {
+    if (responseObject.errorCode !== 0) {
+      log("onConnectionLost:"+responseObject.errorMessage);
+    }
+  }
+
+  function onMessageArrived(message) {
+    log("onMessageArrived:"+message.payloadString);
+  }
+</script>
