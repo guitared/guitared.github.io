@@ -28,10 +28,11 @@
     onFailure:doFail
   }
 
+  log("Connecting to MQTT server via websocket...");
   client.connect(options);
 
   function onConnect() {
-    log("onConnect");
+    log("Connected");
     client.subscribe("/tele/sonoff/RESULT");
     client.subscribe("/sonoff/tele/RESULT");
   }
