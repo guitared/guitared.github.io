@@ -2,9 +2,9 @@
 <pre id="log"></pre>
 
 <script type="text/javascript">
-  var log = document.getElementById('log');
+  var _log = document.getElementById('log');
   function log(e){
-    log.innerText += e + '\n';
+    _log.innerText += e + '\n';
     console.log(e);
   }
   
@@ -24,7 +24,7 @@
   client.connect(options);
 
   function onConnect() {
-    console.log("onConnect");
+    log("onConnect");
     client.subscribe("/tele/sonoff/RESULT");
     client.subscribe("/sonoff/tele/RESULT");
   }
