@@ -12,7 +12,7 @@
   }
   
   function send(){
-    message = new Paho.MQTT.Message("Test sending from"+id);
+    message = new Paho.MQTT.Message("Test sending from "+id);
     message.destinationName = "/sonoff/tele/RESULT";
     client.send(message);
     log('sent..');
@@ -28,7 +28,7 @@
     onFailure:doFail
   }
 
-  log("Connecting to MQTT server via websocket...");
+  log("Connecting to MQTT server via websocket with id: "+id+" ...");
   client.connect(options);
 
   function onConnect() {
