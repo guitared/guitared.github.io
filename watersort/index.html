@@ -1,0 +1,395 @@
+<meta charset="UTF-8">
+<h4>Only support screenshot from iPhone 11.</h4>
+<input type='file' /><br>
+<canvas id="canvas" width="828" height="1792"></canvas>
+
+<script>
+
+/*CONST*/
+
+// screen resolution
+const width = 828
+const height = 1792
+
+// pixel location
+const start_row1 = 530
+const start_row2 = 1051
+const tube_gap = 50
+const tube_height = 360
+const tube_width = 95
+const tube_layer = 77
+
+var canvas = document.getElementById('canvas')
+var cursorpos = document.getElementById('cursorpos')
+var ctx = canvas.getContext('2d')
+ctx.translate(0.5, 0.5);
+canvas.setAttribute('width', width);
+canvas.setAttribute('height', height);
+ctx.lineWidth = 1;
+ctx.strokeStyle = '#0f0';
+ctx.fillStyle = '#0f0';
+ctx.font = "20px Consolas";
+class Tube{
+  constructor(x,y,i,layer){
+    this.x = x
+    this.y = y
+  if(i===undefined){this.i = tubes.length+1}else{this.i=i}
+    if(layer===undefined){this.layer = []}else{this.layer=layer}
+  }
+
+  init(){
+    var i=0
+    while(i<4){
+      var l1 = getColor(this.x+Math.floor(tube_width/2),this.y+tube_gap+Math.floor(tube_layer/2)+(tube_layer*i))
+      if(l1[0]!=l1[1]&&l1[0]!=l1[2]){
+        var hex = fullColorHex(l1)
+        if(colors.indexOf(hex)<0){colors.push(hex)}
+        this.layer.push(colors.indexOf(hex)+1)
+      } else {
+    this.layer.push(0)
+    }
+      point(this.x+Math.floor(tube_width/2),this.y+tube_gap+Math.floor(tube_layer/2)+(tube_layer*i))
+      ctx.fillText(colors.indexOf(hex)+1,this.x+10,this.y+tube_gap+Math.floor(tube_layer/2)+(tube_layer*i)-10)
+      i+=1
+    }
+  }
+
+  border(){
+    drawv(this.x,this.y,this.y+tube_height)
+    drawv(this.x+tube_width,this.y,this.y+tube_height)
+    drawh(this.y,this.x,this.x+tube_width)
+    drawh(this.y+tube_gap,this.x,this.x+tube_width)
+    drawh(this.y+tube_gap+tube_layer,this.x,this.x+tube_width)
+    drawh(this.y+tube_gap+tube_layer+tube_layer,this.x,this.x+tube_width)
+    drawh(this.y+tube_gap+tube_layer+tube_layer+tube_layer,this.x,this.x+tube_width)
+    drawh(this.y+tube_gap+tube_layer+tube_layer+tube_layer+tube_layer,this.x,this.x+tube_width)
+    ctx.fillText("T"+this.i, this.x+10, this.y+25);
+  }
+  
+  finished(){
+  var a = this.layer[0]
+  return arraysEqual(this.layer,[a,a,a,a]) && a != 0
+  }
+  
+  empty(){
+  return this.layer[3] == 0
+  }
+  
+  full(){
+  return this.layer[0] != 0
+  }
+  
+  partial(){
+  var a = this.layer[3]
+  return arraysEqual(this.layer,[0,0,0,a]) || arraysEqual(this.layer,[0,0,a,a]) || arraysEqual(this.layer,[0,a,a,a])
+  }
+  
+  partial_full(){
+  var a = this.layer[0]
+  var b = this.layer[3]
+  return arraysEqual(this.layer,[a,a,a,b])
+  }
+  
+  almost(){
+  var a = this.layer[3]
+  return arraysEqual(this.layer,[0,a,a,a])
+  }
+  
+  gettop(){
+  if(this.layer[0]!=0) return this.layer[0]
+  if(this.layer[1]!=0) return this.layer[1]
+  if(this.layer[2]!=0) return this.layer[2]
+  if(this.layer[3]!=0) return this.layer[3]
+  return 0
+  }
+  
+  pourable(a){
+  if(this.full() || this.finished()) return false
+  return this.empty() || this.gettop() == a
+  }
+  
+  push(a){
+  if(this.empty()) return this.layer[3] = a
+  if(this.layer[1]!=0) return this.layer[0] = a
+  if(this.layer[2]!=0) return this.layer[1] = a
+  if(this.layer[3]!=0) return this.layer[2] = a
+  }
+  
+  pop(){
+  if(this.layer[0]!=0){var tmp = this.layer[0];this.layer[0]=0;return tmp;}
+  if(this.layer[1]!=0){var tmp = this.layer[1];this.layer[1]=0;return tmp;}
+  if(this.layer[2]!=0){var tmp = this.layer[2];this.layer[2]=0;return tmp;}
+  if(this.layer[3]!=0){var tmp = this.layer[3];this.layer[3]=0;return tmp;}
+  }
+  
+  log(){
+  var c1 = colors[this.layer[0]-1]
+  var c2 = colors[this.layer[1]-1]
+  var c3 = colors[this.layer[2]-1]
+  var c4 = colors[this.layer[3]-1]
+  if(c1===undefined)c1='242424'
+  if(c2===undefined)c2='242424'
+  if(c3===undefined)c3='242424'
+  if(c4===undefined)c4='242424'
+  console.log("| "+"%c██"+"%c██"+"%c██"+"%c██"+"%c)",'color:#'+c1,'color:#'+c2,'color:#'+c3,'color:#'+c4,'color:#fff')
+  }
+}
+var tubes = []
+var colors = []
+var stages = []
+calcdone = false
+var N = 0
+
+// functions
+function getColor(x, y) {    
+  var pixel = ctx.getImageData(x, y, 1, 1);
+  var rgb = pixel.data;
+  return rgb;
+}
+
+function rgbToHex(x) { 
+  var hex = Number(x).toString(16);
+  if (hex.length < 2) {
+       hex = "0" + hex;
+  }
+  return hex;
+}
+
+function fullColorHex(rgb) {   
+  var red = rgbToHex(rgb[0]);
+  var green = rgbToHex(rgb[1]);
+  var blue = rgbToHex(rgb[2]);
+  return red+green+blue;
+}
+
+function drawh(h,s,e){
+  ctx.beginPath()
+  ctx.moveTo(s,h)
+  ctx.lineTo(e,h)
+  ctx.stroke()
+}
+
+function drawv(v,s,e){
+  ctx.beginPath()
+  ctx.moveTo(v,s)
+  ctx.lineTo(v,e)
+  ctx.stroke()
+}
+
+function point(x,y){
+  ctx.beginPath()
+  ctx.moveTo(x,y)
+  ctx.lineTo(x+1,y+1)
+  ctx.stroke()
+}
+
+var img = new Image()
+
+img.addEventListener('load', function() {
+  //console.log('img loaded')
+  ctx.clearRect(0, 0, width, height);
+  ctx.drawImage(img,0,0)
+  N = count()
+  for(var i=0;i<N;i+=1){
+  play(i,tubes,0,[])
+  }
+}, false)
+
+
+
+/* cursor position finder */
+canvas.onmousemove = function(e) { 
+    var x = e.pageX - e.currentTarget.offsetLeft-10; 
+    var y = e.pageY - e.currentTarget.offsetTop-10;
+    //cursorpos.innerText = "x:"+x+" y:"+y + '   '+fullColorHex(getColor(x,y))
+}
+
+function count(){
+  var i=0
+  var f = false
+  var count = 0
+  while(i<width){
+    var rgb = getColor(i,start_row1+2)
+    if(rgb[0]==188 && rgb[1]==188 && rgb[2]==188){
+      if(!f){
+        f = true
+        count+=1
+        tubes.push(new Tube(i,start_row1))
+      }
+    } else { f = false}
+    i+=1
+  }
+  i=0
+  f = false
+  while(i<width){
+    var rgb = getColor(i,start_row2+2)
+    if(rgb[0]==188 && rgb[1]==188 && rgb[2]==188){
+      if(!f){
+        f = true
+        count+=1
+        tubes.push(new Tube(i,start_row2))
+      }
+    } else { f = false}
+    i+=1
+  }
+  //console.log(count)
+  for(i in tubes){
+    tubes[i].border()
+    tubes[i].init()
+  if(tubes[i].pourable(8)){
+    ctx.fillText("X"+tubes[i].gettop(),tubes[i].x,tubes[i].y-10)
+  }
+  }
+  return count
+}
+
+function play(ii,ss,depth,ll){
+  if(calcdone)return
+  var depth = deepCopyFunction(depth)
+  var log = deepCopyFunction(ll)
+  var stage = []
+  depth+=1
+  for(var j=0;j<ss.length;j+=1){
+    var tmp = deepCopyFunction(ss[j])
+    stage.push(new Tube(tmp.x,tmp.y,tmp.i,tmp.layer))
+  }
+  var tube = stage[ii]
+  if(tube.empty() || tube.almost() || tube.finished()){return}
+  for(var j=0;j<stage.length;j+=1){
+    if(calcdone)return
+    if(j==ii){continue;}
+    var t = stage[j]
+    if(t.full() || t.finished()){continue;}
+    if(tube.partial() & t.empty()){continue;}
+    var a = tube.gettop()
+    if(t.pourable(a)){
+      //console.log(j,tube.log(),t.log())
+      if(tube.full() && tube.partial_full() && ! t.almost()){
+        continue;
+      }
+      var tlog1 = JSON.parse(JSON.stringify(tube))
+      var tlog2 = JSON.parse(JSON.stringify(t))
+      tube.pop()
+      t.push(a)
+      //console.log('.')
+      while(tube.gettop() == a && ! t.full()){
+        tube.pop()
+        t.push(a)
+      }
+      newhash = stringToHash(JSON.stringify(stage))
+      if(stages.indexOf(newhash)>=0){
+        // collide
+        //console.log('-')
+        return
+      }
+      stages.push(newhash)
+      log.push({i:ii+1,ti:tlog1,j:j+1,tj:tlog2,s:stage})
+      wincount = 0
+      for(var i=0;i<stage.length;i+=1){
+        if(stage[i].finished()){
+          wincount+=1
+          if(wincount>= N-2){
+            console.log("WIN!!")
+            recap(log)
+            calcdone=true
+            return
+          }
+        }
+      }
+      for(var tt=0;tt<stage.length;tt+=1){
+        if(stage[tt].empty()||stage[tt].finished()){
+          continue;
+        }
+        //console.log(log)
+        play(tt,stage,depth,log)
+      }
+    }
+  }
+}
+
+function recap(log){
+  for(i in log){
+    compares(i,log[i].ti,log[i].tj)
+  }
+}
+
+function compares(i,ti,tj){
+  var c1 = colors[ti.layer[0]-1]
+  var c2 = colors[ti.layer[1]-1]
+  var c3 = colors[ti.layer[2]-1]
+  var c4 = colors[ti.layer[3]-1]
+  if(c1===undefined)c1='242424'
+  if(c2===undefined)c2='242424'
+  if(c3===undefined)c3='242424'
+  if(c4===undefined)c4='242424'
+  var d1 = colors[tj.layer[0]-1]
+  var d2 = colors[tj.layer[1]-1]
+  var d3 = colors[tj.layer[2]-1]
+  var d4 = colors[tj.layer[3]-1]
+  if(d1===undefined)d1='242424'
+  if(d2===undefined)d2='242424'
+  if(d3===undefined)d3='242424'
+  if(d4===undefined)d4='242424'
+  var x1 = ti.i
+  var x2 = tj.i
+  if(x1<10) x1 = " "+x1 
+  if(x2<10) x2 = " "+x2 
+  if(i<10) i = " "+i 
+  console.log("%c"+i+' '+x1+"| "+"%c██"+"%c██"+"%c██"+"%c██"+"%c) 🡒 "+x2+"| "+"%c██"+"%c██"+"%c██"+"%c██"+"%c)",'font-family:consolas','color:#'+c1,'color:#'+c2,'color:#'+c3,'color:#'+c4,'color:#fff','color:#'+d1,'color:#'+d2,'color:#'+d3,'color:#'+d4,'color:#fff')
+}
+
+window.addEventListener('load', function() {
+  img.src = 'image2.png'
+  document.querySelector('input[type="file"]').addEventListener('change', function() {
+      if (this.files && this.files[0]) {
+      tubes = []
+      colors = []
+      stages = []
+      calcdone = false
+      N = 0
+      img.src = URL.createObjectURL(this.files[0]); // set src to blob url
+      }
+  })
+})
+
+</script>
+<script>
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length !== b.length) return false;
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+function stringToHash(string){ 
+  var hash = 0;
+  if (string.length == 0) return hash; 
+  for (i = 0; i < string.length; i++) { 
+    char = string.charCodeAt(i); 
+    hash = ((hash << 5) - hash) + char; 
+    hash = hash & hash; 
+  } 
+  return hash; 
+}
+const deepCopyFunction = (inObject) => {
+  let outObject, value, key
+
+  if (typeof inObject !== "object" || inObject === null) {
+    return inObject // Return the value if inObject is not an object
+  }
+
+  // Create an array or object to hold the values
+  outObject = Array.isArray(inObject) ? [] : {}
+
+  for (key in inObject) {
+    value = inObject[key]
+
+    // Recursively (deep) copy for nested objects, including arrays
+    outObject[key] = deepCopyFunction(value)
+  }
+
+  return outObject
+}
+</script>
