@@ -5,8 +5,6 @@
 
 <script>
 
-/*CONST*/
-
 // screen resolution
 const width = 828
 const height = 1792
@@ -22,13 +20,13 @@ const tube_layer = 77
 var canvas = document.getElementById('canvas')
 var cursorpos = document.getElementById('cursorpos')
 var ctx = canvas.getContext('2d')
-ctx.translate(0.5, 0.5);
-canvas.setAttribute('width', width);
-canvas.setAttribute('height', height);
-ctx.lineWidth = 1;
-ctx.strokeStyle = '#0f0';
-ctx.fillStyle = '#0f0';
-ctx.font = "20px Consolas";
+ctx.translate(0.5, 0.5)
+canvas.setAttribute('width', width)
+canvas.setAttribute('height', height)
+ctx.lineWidth = 1
+ctx.strokeStyle = '#0f0'
+ctx.fillStyle = '#0f0'
+ctx.font = "20px Consolas"
 class Tube{
   constructor(x,y,i,layer){
     this.x = x
@@ -38,7 +36,7 @@ class Tube{
   }
 
   init(){
-    var i=0
+    var i = 0
     while(i<4){
       var l1 = getColor(this.x+Math.floor(tube_width/2),this.y+tube_gap+Math.floor(tube_layer/2)+(tube_layer*i))
       if(l1[0]!=l1[1]&&l1[0]!=l1[2]){
@@ -63,7 +61,7 @@ class Tube{
     drawh(this.y+tube_gap+tube_layer+tube_layer,this.x,this.x+tube_width)
     drawh(this.y+tube_gap+tube_layer+tube_layer+tube_layer,this.x,this.x+tube_width)
     drawh(this.y+tube_gap+tube_layer+tube_layer+tube_layer+tube_layer,this.x,this.x+tube_width)
-    ctx.fillText("T"+this.i, this.x+10, this.y+25);
+    ctx.fillText("T"+this.i, this.x+10, this.y+25)
   }
   
   finished(){
@@ -122,17 +120,6 @@ class Tube{
   if(this.layer[3]!=0){var tmp = this.layer[3];this.layer[3]=0;return tmp;}
   }
   
-  log(){
-  var c1 = colors[this.layer[0]-1]
-  var c2 = colors[this.layer[1]-1]
-  var c3 = colors[this.layer[2]-1]
-  var c4 = colors[this.layer[3]-1]
-  if(c1===undefined)c1='242424'
-  if(c2===undefined)c2='242424'
-  if(c3===undefined)c3='242424'
-  if(c4===undefined)c4='242424'
-  console.log("| "+"%c██"+"%c██"+"%c██"+"%c██"+"%c)",'color:#'+c1,'color:#'+c2,'color:#'+c3,'color:#'+c4,'color:#fff')
-  }
 }
 var tubes = []
 var colors = []
@@ -142,24 +129,24 @@ var N = 0
 
 // functions
 function getColor(x, y) {    
-  var pixel = ctx.getImageData(x, y, 1, 1);
-  var rgb = pixel.data;
-  return rgb;
+  var pixel = ctx.getImageData(x, y, 1, 1)
+  var rgb = pixel.data
+  return rgb
 }
 
 function rgbToHex(x) { 
-  var hex = Number(x).toString(16);
+  var hex = Number(x).toString(16)
   if (hex.length < 2) {
-       hex = "0" + hex;
+       hex = "0" + hex
   }
-  return hex;
+  return hex
 }
 
 function fullColorHex(rgb) {   
-  var red = rgbToHex(rgb[0]);
-  var green = rgbToHex(rgb[1]);
-  var blue = rgbToHex(rgb[2]);
-  return red+green+blue;
+  var red = rgbToHex(rgb[0])
+  var green = rgbToHex(rgb[1])
+  var blue = rgbToHex(rgb[2])
+  return red+green+blue
 }
 
 function drawh(h,s,e){
@@ -186,16 +173,13 @@ function point(x,y){
 var img = new Image()
 
 img.addEventListener('load', function() {
-  //console.log('img loaded')
-  ctx.clearRect(0, 0, width, height);
+  ctx.clearRect(0, 0, width, height)
   ctx.drawImage(img,0,0)
   N = count()
   for(var i=0;i<N;i+=1){
   play(i,tubes,0,[])
   }
 }, false)
-
-
 
 /* cursor position finder */
 canvas.onmousemove = function(e) { 
@@ -205,7 +189,7 @@ canvas.onmousemove = function(e) {
 }
 
 function count(){
-  var i=0
+  var i = 0
   var f = false
   var count = 0
   while(i<width){
@@ -216,7 +200,7 @@ function count(){
         count+=1
         tubes.push(new Tube(i,start_row1))
       }
-    } else { f = false}
+    } else {f = false}
     i+=1
   }
   i=0
@@ -229,7 +213,7 @@ function count(){
         count+=1
         tubes.push(new Tube(i,start_row2))
       }
-    } else { f = false}
+    } else {f = false}
     i+=1
   }
   //console.log(count)
@@ -244,7 +228,7 @@ function count(){
 }
 
 function play(ii,ss,depth,ll){
-  if(calcdone)return
+  if(calcdone) return
   var depth = deepCopyFunction(depth)
   var log = deepCopyFunction(ll)
   var stage = []
@@ -254,34 +238,27 @@ function play(ii,ss,depth,ll){
     stage.push(new Tube(tmp.x,tmp.y,tmp.i,tmp.layer))
   }
   var tube = stage[ii]
-  if(tube.empty() || tube.almost() || tube.finished()){return}
+  if(tube.empty() || tube.almost() || tube.finished()) return
   for(var j=0;j<stage.length;j+=1){
-    if(calcdone)return
-    if(j==ii){continue;}
+    if(calcdone) return
+    if(j==ii) continue
     var t = stage[j]
-    if(t.full() || t.finished()){continue;}
-    if(tube.partial() & t.empty()){continue;}
+    if(t.full() || t.finished()) continue
+    if(tube.partial() & t.empty()) continue
     var a = tube.gettop()
     if(t.pourable(a)){
       //console.log(j,tube.log(),t.log())
-      if(tube.full() && tube.partial_full() && ! t.almost()){
-        continue;
-      }
+      if(tube.full() && tube.partial_full() && ! t.almost()) continue
       var tlog1 = JSON.parse(JSON.stringify(tube))
       var tlog2 = JSON.parse(JSON.stringify(t))
       tube.pop()
       t.push(a)
-      //console.log('.')
       while(tube.gettop() == a && ! t.full()){
         tube.pop()
         t.push(a)
       }
       newhash = stringToHash(JSON.stringify(stage))
-      if(stages.indexOf(newhash)>=0){
-        // collide
-        //console.log('-')
-        return
-      }
+      if(stages.indexOf(newhash)>=0) return
       stages.push(newhash)
       log.push({i:ii+1,ti:tlog1,j:j+1,tj:tlog2,s:stage})
       wincount = 0
@@ -300,7 +277,6 @@ function play(ii,ss,depth,ll){
         if(stage[tt].empty()||stage[tt].finished()){
           continue;
         }
-        //console.log(log)
         play(tt,stage,depth,log)
       }
     }
@@ -347,7 +323,7 @@ window.addEventListener('load', function() {
       stages = []
       calcdone = false
       N = 0
-      img.src = URL.createObjectURL(this.files[0]); // set src to blob url
+      img.src = URL.createObjectURL(this.files[0])
       }
   })
 })
@@ -355,41 +331,32 @@ window.addEventListener('load', function() {
 </script>
 <script>
 function arraysEqual(a, b) {
-  if (a === b) return true;
-  if (a == null || b == null) return false;
-  if (a.length !== b.length) return false;
+  if (a === b) return true
+  if (a == null || b == null) return false
+  if (a.length !== b.length) return false
   for (var i = 0; i < a.length; ++i) {
-    if (a[i] !== b[i]) return false;
+    if (a[i] !== b[i]) return false
   }
-  return true;
+  return true
 }
 function stringToHash(string){ 
-  var hash = 0;
-  if (string.length == 0) return hash; 
+  var hash = 0
+  if (string.length == 0) return hash
   for (i = 0; i < string.length; i++) { 
-    char = string.charCodeAt(i); 
-    hash = ((hash << 5) - hash) + char; 
-    hash = hash & hash; 
+    char = string.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash
   } 
-  return hash; 
+  return hash
 }
 const deepCopyFunction = (inObject) => {
   let outObject, value, key
-
-  if (typeof inObject !== "object" || inObject === null) {
-    return inObject // Return the value if inObject is not an object
-  }
-
-  // Create an array or object to hold the values
+  if (typeof inObject !== "object" || inObject === null) return inObject
   outObject = Array.isArray(inObject) ? [] : {}
-
   for (key in inObject) {
     value = inObject[key]
-
-    // Recursively (deep) copy for nested objects, including arrays
     outObject[key] = deepCopyFunction(value)
   }
-
   return outObject
 }
 </script>
