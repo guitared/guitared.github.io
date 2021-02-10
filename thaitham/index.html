@@ -1,0 +1,170 @@
+<html>
+<title>Thai Tham Mapper</title>
+<meta charset="utf-8" />
+<h4>Thai Tham Mapper</h4>
+<textarea>ᨲ᩠ᩅᩫᨾᩮᩥᩬᨦ</textarea>
+<pre id="hex"></pre>
+<pre id="thai"></pre>
+</html>
+<script>
+  var input = document.querySelector('textarea')
+  var output = document.querySelector('#hex')
+  var output2 = document.querySelector('#thai')
+
+  var dict = {
+    '1a20' : 'e01',
+    '1a21' : 'e02',
+    '1a22' : 'e03',
+    '1a23' : 'e04',
+    '1a24' : 'e05',
+    '1a25' : 'e06',
+    '1a26' : 'e07',
+    '1a27' : 'e08',
+    '1a28' : 'e09',
+    '1a29' : 'e0a',
+    '1a2a' : 'e0b',
+    '1a2b' : 'e0c',
+    '1a2c' : 'e0d',
+    '1a2d' : 'e0e',
+    '1a2e' : 'e10',
+    '1a2f' : 'e14', // ด e11 ฑ
+
+    '1a30' : 'e12',
+    '1a31' : 'e13',
+    '1a32' : 'e15',
+    '1a33' : 'e16',
+    '1a34' : 'e17',
+    '1a35' : 'e18',
+    '1a36' : 'e19',
+    '1a37' : 'e1a', // บ e1b ป
+    '1a38' : 'e1b',
+    '1a39' : 'e1c',
+    '1a3a' : 'e1d',
+    '1a3b' : 'e1e',
+    '1a3c' : 'e1f',
+    '1a3d' : 'e20',
+    '1a3e' : 'e21',
+    '1a3f' : 'e22',
+
+    '1a40' : 'e22', // อยะ หยะ
+    '1a41' : 'e23',
+    '1a42' : 'e24',
+    '1a43' : 'e25',
+    '1a44' : 'e26',
+    '1a45' : 'e27',
+    '1a46' : 'e28',
+    '1a47' : 'e29',
+    '1a48' : 'e2a',
+    '1a49' : 'e2b',
+    '1a4a' : 'e2c',
+    '1a4b' : 'e2d',
+    '1a4c' : 'e2e',
+    '1a4d' : 'e34',
+    '1a4e' : 'e35',
+    '1a4f' : 'e38',
+
+    '1a50' : 'e39',
+    '1a51' : 'e40',
+    '1a52' : 'e42',
+    '1a53' : 'e41,e25', // แล่
+    '1a54' : 'e2a', // สส หส
+    '1a55' : 'e23', // ร ควบกล้ำ
+    '1a56' : 'e25', // ล ควยกล้ำ
+    '1a57' : '0000',
+    '1a58' : 'e07', // ง สะกด
+    '1a59' : 'e07', // ง สะกด
+    '1a5a' : 'e1e', // พ สะกด
+    '1a5b' : 'e1e', // พ สะกด
+    '1a5c' : 'e21', // ม สะกด
+    '1a5d' : 'e1a', // บ สะกด
+    '1a5e' : 'e2a', // ส สะกด
+    '1a5f' : 'xxxx', // no char
+
+    '1a60' : '1a60', // สะกด
+    '1a61' : 'e30',
+    '1a62' : 'e31',
+    '1a63' : 'e32',
+    '1a64' : 'e45',
+    '1a65' : 'e34',
+    '1a66' : 'e35',
+    '1a67' : 'e36',
+    '1a68' : 'e37',
+    '1a69' : 'e38',
+    '1a6a' : 'e39',
+    '1a6b' : 'e42,e30', // โอะ
+    '1a6c' : 'e2d', // ออ
+    '1a6d' : 'e2d,e22', // อยะ
+    '1a6e' : 'e40',
+    '1a6f' : 'e41',
+
+    '1a70' : 'e42',
+    '1a71' : 'e44',
+    '1a72' : 'e44',
+    '1a73' : 'e40,e45', // เอา
+    '1a74' : 'e4d',
+    '1a75' : 'e48',
+    '1a76' : 'e49',
+    '1a77' : 'e49',
+    '1a78' : 'e4a',
+    '1a79' : 'e4b',
+    '1a7a' : 'e4c',
+    '1a7b' : 'e4c',
+    '1a7c' : 'e4e',
+    '1a7d' : 'xxxx',  // no char
+    '1a7e' : 'xxxx',  // no char
+    '1a7f' : 'e3a',
+
+    '1a80' : 'e50',
+    '1a81' : 'e51',
+    '1a82' : 'e52',
+    '1a83' : 'e53',
+    '1a84' : 'e54',
+    '1a85' : 'e55',
+    '1a86' : 'e56',
+    '1a87' : 'e57',
+    '1a88' : 'e58',
+    '1a89' : 'e59',
+
+    '1a90' : 'e50',
+    '1a91' : 'e51',
+    '1a92' : 'e52',
+    '1a93' : 'e53',
+    '1a94' : 'e54',
+    '1a95' : 'e55',
+    '1a96' : 'e56',
+    '1a97' : 'e57',
+    '1a98' : 'e58',
+    '1a99' : 'e59'
+  }
+
+
+  function translate(hex){
+    if(dict[hex]){
+      var chars = dict[hex].split(/,/)
+      var i=0
+      var out = ''
+      for(i=0;i<chars.length;i++){
+        out+=String.fromCharCode(parseInt(chars[i],16))
+      }
+      return out
+    }
+    return String.fromCharCode(parseInt(hex,16))
+  }
+
+  function decodetxt(){
+    output.innerText = ''
+    output2.innerText = ''
+    var i=0
+    for(i=0;i<input.value.length;i++){
+      var hex = input.value.charCodeAt(i).toString(16)
+      output.innerText += hex + ' '
+      output2.innerText += translate(hex) + ' '
+    }
+  }
+  input.onkeyup = function(){decodetxt()}
+  decodetxt()
+</script>
+<style>
+  textarea {width:400px;height:200px;}
+  pre {border:1px solid;width:400px;height:200px;white-space: pre-wrap;word-wrap: break-word;}
+</style>
