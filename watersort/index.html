@@ -2,7 +2,10 @@
 <h4>Only support screenshot from iPhone 11.</h4>
 <input type='file' /><br>
 <canvas id="canvas" width="828" height="1792"></canvas>
-
+<div id="logger"></div>
+<style>
+  div#logger {font-family: Consolas;}
+</style>
 <script>
 
 // screen resolution
@@ -19,6 +22,7 @@ const tube_layer = 77
 
 var canvas = document.getElementById('canvas')
 var cursorpos = document.getElementById('cursorpos')
+var logger = document.getElementById('logger')
 var ctx = canvas.getContext('2d')
 ctx.translate(0.5, 0.5)
 canvas.setAttribute('width', width)
@@ -61,7 +65,11 @@ class Tube{
     drawh(this.y+tube_gap+tube_layer+tube_layer,this.x,this.x+tube_width)
     drawh(this.y+tube_gap+tube_layer+tube_layer+tube_layer,this.x,this.x+tube_width)
     drawh(this.y+tube_gap+tube_layer+tube_layer+tube_layer+tube_layer,this.x,this.x+tube_width)
+    ctx.font = "32px Consolas"
+    ctx.fillStyle = '#fff'
     ctx.fillText("T"+this.i, this.x+10, this.y+25)
+    ctx.font = "20px Consolas"
+    ctx.fillStyle = '#0f0'
   }
   
   finished(){
@@ -267,6 +275,7 @@ function play(ii,ss,depth,ll){
           wincount+=1
           if(wincount>= N-2){
             console.log("WIN!!")
+            logger.innerHTML = ""
             recap(log)
             calcdone=true
             return
@@ -288,7 +297,7 @@ function recap(log){
     compares(i,log[i].ti,log[i].tj)
   }
 }
-
+  
 function compares(i,ti,tj){
   var c1 = colors[ti.layer[0]-1]
   var c2 = colors[ti.layer[1]-1]
@@ -311,8 +320,15 @@ function compares(i,ti,tj){
   if(x1<10) x1 = " "+x1 
   if(x2<10) x2 = " "+x2 
   if(i<10) i = " "+i 
+  printlog(i,x1,x2,c1,c2,c3,c4,d1,d2,d3,d4)
   console.log("%c"+i+' '+x1+"| "+"%c██"+"%c██"+"%c██"+"%c██"+"%c) 🡒 "+x2+"| "+"%c██"+"%c██"+"%c██"+"%c██"+"%c)",'font-family:consolas','color:#'+c1,'color:#'+c2,'color:#'+c3,'color:#'+c4,'color:#fff','color:#'+d1,'color:#'+d2,'color:#'+d3,'color:#'+d4,'color:#fff')
 }
+  
+function printlog(i,x1,x2,c1,c2,c3,c4,d1,d2,d3,d4){
+  logger.innerHTML += '<p>'+i+' '+x1+'| '+'<span color="'+c1+'">██</span>'+'<span color="'+c2+'">██</span>'+'<span color="'+c3+'">██</span>'+'<span color="'+c4+'">██</span>'
+  logger.innerHTML += ') 🡒 '+x2+'| '+'<span color="'+d1+'">██</span>'+'<span color="'+d2+'">██</span>'+'<span color="'+d3+'">██</span>'+'<span color="'+d4+'">██</span>'+')</p>'
+}
+
 
 window.addEventListener('load', function() {
   img.src = 'image2.png'
