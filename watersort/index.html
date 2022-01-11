@@ -67,7 +67,7 @@ class Tube{
     drawh(this.y+tube_gap+tube_layer+tube_layer+tube_layer+tube_layer,this.x,this.x+tube_width)
     ctx.font = "32px Consolas"
     ctx.fillStyle = '#fff'
-    ctx.fillText("T"+this.i, this.x+10, this.y+25)
+    ctx.fillText("T"+this.i, this.x+10, this.y+35)
     ctx.font = "20px Consolas"
     ctx.fillStyle = '#0f0'
   }
@@ -325,6 +325,14 @@ function compares(i,ti,tj){
 }
   
 function printlog(i,x1,x2,c1,c2,c3,c4,d1,d2,d3,d4){
+  if(c1==='242424')c1='fff'
+  if(c2==='242424')c2='fff'
+  if(c3==='242424')c3='fff'
+  if(c4==='242424')c4='fff'
+  if(d1==='242424')d1='fff'
+  if(d2==='242424')d2='fff'
+  if(d3==='242424')d3='fff'
+  if(d4==='242424')d4='fff'
   logger.innerHTML += '<p>'+i+' '+x1+'| '+'<span style="color:#'+c1+'">██</span>'+'<span style="color:#'+c2+'">██</span>'+'<span style="color:#'+c3+'">██</span>'+'<span style="color:#'+c4+'">██</span>'+') 🡒 '+x2+'| '+'<span style="color:#'+d1+'">██</span>'+'<span style="color:#'+d2+'">██</span>'+'<span style="color:#'+d3+'">██</span>'+'<span style="color:#'+d4+'">██</span>'+')</p>'
 }
 
